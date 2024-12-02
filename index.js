@@ -1,12 +1,10 @@
+// index.js
 const express = require('express');
 const app = express();
-const PORT = 3002
-// Middleware to parse JSON
-app.use(express.json());
+const port = process.env.PORT || 3000;
 
-// In-memory data store for different ad types
-let ads = {
-   affiliate: {
+const ads = {
+  affiliate: {
     healthAndFitness: [
       { id: 1, title: 'Nagano Tonic - $5 EPCs', url: 'https://be7887gjrar2bmfarkven07nfx.hop.clickbank.net' },
       { id: 2, title: 'Gluco6 - Now Open To Everyone!', url: 'https://1c9dd1pio7kydu65medfhtdv9m.hop.clickbank.net' },
@@ -38,58 +36,10 @@ let ads = {
   ],
 };
 
-// Routes
-
-// 1. Get all ads by type
-app.get('/ads/:type', (req, res) => {
-  const { type } = req.params;
-  if (!ads[type]) {
-    return res.status(404).json({ message: 'Ad type not found' });
-  }
-  res.json(ads[type]);
+app.get('/api/ads', (req, res) => {
+  res.send(ads);
 });
 
-// 2. Add a new ad to a specific type
-app.post('/ads/:type', (req, res) => {
-  const { type } = req.params;
-  const newAd = req.body;
-
-  if (!ads[type]) {
-    return res.status(404).json({ message: 'Ad type not found' });
-  }
-
-  newAd.id = ads[type].length + 1; // Auto-increment ID
-  ads[type].push(newAd);
-  res.status(201).json(newAd);
-});
-
-// 3. Update an ad by type and ID
-app.put('/ads/:type/:id', (req, res) => {
-  const { type, id } = req.params;
-  const adIndex = ads[type]?.findIndex((ad) => ad.id === parseInt(id));
-
-  if (adIndex === -1 || adIndex === undefined) {
-    return res.status(404).json({ message: 'Ad not found' });
-  }
-
-  ads[type][adIndex] = { ...ads[type][adIndex], ...req.body };
-  res.json(ads[type][adIndex]);
-});
-
-// 4. Delete an ad by type and ID
-app.delete('/ads/:type/:id', (req, res) => {
-  const { type, id } = req.params;
-  const adIndex = ads[type]?.findIndex((ad) => ad.id === parseInt(id));
-
-  if (adIndex === -1 || adIndex === undefined) {
-    return res.status(404).json({ message: 'Ad not found' });
-  }
-
-  ads[type].splice(adIndex, 1);
-  res.json({ message: 'Ad deleted successfully' });
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
