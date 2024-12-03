@@ -1,7 +1,6 @@
-// index.js
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 
 const ads = {
   affiliate: {
@@ -36,8 +35,27 @@ const ads = {
   ],
 };
 
+// Route for all ads
 app.get('/api/ads', (req, res) => {
   res.send(ads);
+  res.json({ message: 'CORS enabled!' });
+});
+
+// Routes for specific sections
+app.get('/api/ads/affiliate', (req, res) => {
+  res.send(ads.affiliate);
+});
+
+app.get('/api/ads/bannerAds', (req, res) => {
+  res.send(ads.bannerAds);
+});
+
+app.get('/api/ads/videoAds', (req, res) => {
+  res.send(ads.videoAds);
+});
+
+app.get('/api/ads/directLinks', (req, res) => {
+  res.send(ads.directLinks);
 });
 
 app.listen(port, () => {
