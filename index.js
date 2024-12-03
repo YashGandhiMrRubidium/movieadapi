@@ -34,7 +34,7 @@ const ads = {
     { id: 2, title: 'Support Page', url: 'https://example.com/support' },
   ],
 };
-
+app.use(cors());
 // Route for all ads
 app.get('/api/ads', (req, res) => {
   res.send(ads);
