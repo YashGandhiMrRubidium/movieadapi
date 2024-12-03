@@ -37,7 +37,6 @@ const ads = {
 // Route for all ads
 app.get('/api/ads', (req, res) => {
   res.send(ads);
-  res.json({ message: 'CORS enabled!' });
 });
 
 // Routes for specific sections
